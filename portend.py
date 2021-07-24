@@ -45,10 +45,7 @@ def fixDict(d):
             # If it is just a normal value...
             res[key] = d[key]
 
-    print(res)
-
     return res
-
 
 def dictListToJSON(li):
     res = ""
@@ -58,11 +55,19 @@ def dictListToJSON(li):
         res += dumps(fixedD)
     return res
 
+#### ENDPOINTS ####
+
+pQuery = "SELECT * FROM posts" # Standard query used to retrieve posts
 
 # Endpoint that returns all posts
 @app.route("/api/posts")
 def allPosts():
     cnx = connectToDB()
-    return dictListToJSON(fetchResults(cnx, "SELECT * FROM posts"))
+    return dictListToJSON(fetchResults(cnx, pQuery))
     cnx.close()
 
+# Endpoint that returns a specified amount of posts
+@app.route("/api/posts/<int:posts_amount>")
+def postsLimited(posts_amount):
+    cnx = connectToDB()
+    return dictListToJSON(fetchResults(cnx, pQuery + " LIMIT " + str(posts_amount)))
