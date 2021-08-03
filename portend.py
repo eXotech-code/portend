@@ -4,6 +4,7 @@ from mysql.connector import connect, Error
 from flask import Flask
 from json import dumps
 import os
+import sys
 import datetime
 
 app = Flask(__name__)
@@ -12,7 +13,7 @@ app = Flask(__name__)
 def connectToDB():
     try:
         cn = connect(
-            host = "localhost",
+            host = "db",
             user = os.environ.get("DB_USER"),
             password = os.environ.get("DB_PASS"),
             database = "portfolio"
@@ -20,6 +21,7 @@ def connectToDB():
         return cn;
     except Error as e:
         print(e)
+        sys.exit(1)
 
 def fetchResults(connection, query):
     try:
