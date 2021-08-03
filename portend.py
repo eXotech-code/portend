@@ -50,12 +50,15 @@ def fixDict(d):
     return res
 
 def dictListToJSON(li):
-    res = ""
+    listJSON = []
+
     # Iterate over all dictionaries in list.
     for d in li:
         fixedD = fixDict(d)
-        res += dumps(fixedD)
-    return res
+
+        listJSON.append(fixedD)
+
+    return dumps(listJSON)
 
 #### ENDPOINTS ####
 
