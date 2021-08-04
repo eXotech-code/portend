@@ -75,4 +75,22 @@ def allPosts():
 @app.route("/api/posts/<int:posts_amount>")
 def postsLimited(posts_amount):
     cnx = connectToDB()
-    return dictListToJSON(fetchResults(cnx, pQuery + " LIMIT " + str(posts_amount)))
+
+    # Limit amount of posts returned.
+    res = fetchResults(cnx, pQuery + " LIMIT " + str(posts_amount))
+
+    # If client is asking for more posts than is currently available,
+    # return the rest as empty objects.
+    if len(res) < posts_amount:
+        for i in range(len(res), posts_amount):
+            res.append({
+                "id": i,
+                "title": "ERROR: Resource not available",
+                "date": datetime.datetime(1970, 1, 1, 0, 0),
+                "description": """The requested resource could not be found in the database.
+                                  This happens when there's not enough content in the database or
+                                  the request contains errors.""",
+                "hero_id": None
+            })
+
+    return dictListToJSON(res)
