@@ -84,7 +84,7 @@ def postsLimited(posts_amount):
     if len(res) < posts_amount:
         for i in range(len(res), posts_amount):
             res.append({
-                "id": i,
+                "id": i+1, # Because it started with 1 instead of 0.
                 "title": "ERROR: Resource not available",
                 "date": datetime.datetime(1970, 1, 1, 0, 0),
                 "description": """The requested resource could not be found in the database.
